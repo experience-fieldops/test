@@ -1,0 +1,1465 @@
+{
+  "info": {
+    "name": "FieldOps API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection completa — bodies baseados nos DTOs reais do projeto"
+  },
+  "variable": [
+    { "key": "baseUrl",       "value": "http://localhost:8080" },
+    { "key": "token",         "value": "" },
+    { "key": "userId",        "value": "" },
+    { "key": "clientId",      "value": "" },
+    { "key": "siteId",        "value": "" },
+    { "key": "equipmentId",   "value": "" },
+    { "key": "templateId",    "value": "" },
+    { "key": "versionId",     "value": "" },
+    { "key": "sectionId",     "value": "" },
+    { "key": "itemId",        "value": "" },
+    { "key": "inspectionId",  "value": "" },
+    { "key": "responseId",    "value": "" },
+    { "key": "evidenceId",    "value": "" },
+    { "key": "reviewId",      "value": "" },
+    { "key": "ncId",          "value": "" }
+  ],
+  "item": [
+
+    {
+      "name": "01 - Autenticação",
+      "item": [
+        {
+          "name": "Register (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Admin FieldOps\",\n  \"email\": \"admin@fieldops.com\",\n  \"password\": \"Admin@123\",\n  \"role\": \"ADMIN\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b && b.id) pm.collectionVariables.set('userId', b.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Register (SUPERVISOR)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Maria Supervisora\",\n  \"email\": \"supervisor@fieldops.com\",\n  \"password\": \"Sup@123\",\n  \"role\": \"SUPERVISOR\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Register (TECNICO)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Carlos Tecnico\",\n  \"email\": \"tecnico@fieldops.com\",\n  \"password\": \"Tec@123\",\n  \"role\": \"TECNICO\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"email\": \"admin@fieldops.com\",\n  \"password\": \"Admin@123\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "const b = pm.response.json();",
+              "const t = b.token || (b.data && b.data.token);",
+              "if (t) pm.collectionVariables.set('token', t);",
+              "pm.test('Token salvo', () => pm.expect(pm.collectionVariables.get('token')).to.not.be.empty);"
+            ]}
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "02 - Usuários",
+      "item": [
+        {
+          "name": "Listar usuários",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/user"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "const b = pm.response.json();",
+              "if (Array.isArray(b) && b.length > 0) pm.collectionVariables.set('userId', b[0].id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Criar usuário (via /api/user)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/user",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Novo Tecnico\",\n  \"email\": \"novo.tecnico@fieldops.com\",\n  \"password\": \"Senha@123\",\n  \"role\": \"TECNICO\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b && b.id) pm.collectionVariables.set('userId', b.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Buscar usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/user/{{userId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar usuário",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/user/{{userId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Nome Atualizado\",\n  \"role\": \"TECNICO\",\n  \"active\": true\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Deletar usuário (soft delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/user/{{userId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('204 No Content', () => pm.response.to.have.status(204));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "03 - Clientes",
+      "item": [
+        {
+          "name": "Criar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/clients",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Empresa ABC\",\n  \"document\": \"12.345.678/0001-90\",\n  \"email\": \"contato@abc.com\",\n  \"phone\": \"(11) 99999-0000\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('clientId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar clientes",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/clients"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Empresa ABC Atualizada\",\n  \"document\": \"12.345.678/0001-90\",\n  \"email\": \"novo@abc.com\",\n  \"phone\": \"(11) 99999-1111\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status do cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"INACTIVE\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "04 - Locais (Sites)",
+      "item": [
+        {
+          "name": "Criar local",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}/sites",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Filial São Paulo\",\n  \"address\": \"Av. Paulista, 1000, São Paulo - SP\",\n  \"latitude\": -23.5613,\n  \"longitude\": -46.6563\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('siteId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar locais do cliente",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}/sites"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar local por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/sites/{{siteId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar local",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sites/{{siteId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Filial São Paulo - Atualizada\",\n  \"address\": \"Av. Paulista, 2000, São Paulo - SP\",\n  \"latitude\": -23.5613,\n  \"longitude\": -46.6563\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status do local",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sites/{{siteId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"INACTIVE\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "05 - Equipamentos",
+      "item": [
+        {
+          "name": "Criar equipamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sites/{{siteId}}/equipments",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Compressor Industrial A1\",\n  \"description\": \"Compressor de ar 100HP Atlas Copco\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('equipmentId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar equipamentos do local",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/sites/{{siteId}}/equipments"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar equipamento por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/equipments/{{equipmentId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar por QR Code",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/equipments/qrcode/SUBSTITUA-PELO-QRCODE"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar equipamento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/equipments/{{equipmentId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"name\": \"Compressor Industrial A1 - Rev\",\n  \"description\": \"Compressor revisado\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status do equipamento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/equipments/{{equipmentId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"INACTIVE\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "06 - Templates de Inspeção",
+      "item": [
+        {
+          "name": "Criar template",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/templates",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Inspeção de Compressores\",\n  \"description\": \"Checklist para inspeção de compressores industriais\",\n  \"category\": \"MECANICO\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('templateId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar templates",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar template por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates/{{templateId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar template",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/templates/{{templateId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Inspeção de Compressores - Rev\",\n  \"description\": \"Versão revisada do checklist\",\n  \"category\": \"MECANICO\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Publicar versão do template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates/{{templateId}}/versions"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('versionId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar versões do template",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates/{{templateId}}/versions"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar versão com seções e itens",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates/versions/{{versionId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status do template",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/templates/{{templateId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"INACTIVE\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "07 - Seções do Template",
+      "item": [
+        {
+          "name": "Criar seção",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/templates/versions/{{versionId}}/sections",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Inspeção Visual\",\n  \"description\": \"Verificações visuais do equipamento\",\n  \"displayOrder\": 0\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('sectionId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Atualizar seção",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/templates/versions/{{versionId}}/sections/{{sectionId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Inspeção Visual - Rev\",\n  \"description\": \"Verificações visuais detalhadas\",\n  \"displayOrder\": 0\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Deletar seção",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/templates/versions/{{versionId}}/sections/{{sectionId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('204 No Content', () => pm.response.to.have.status(204));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "08 - Itens do Template",
+      "item": [
+        {
+          "name": "Criar item (BOOLEAN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"code\": \"VIS-001\",\n  \"title\": \"Existe vazamento de oleo?\",\n  \"description\": \"Verificar presenca de vazamento no selo mecanico\",\n  \"responseType\": \"BOOLEAN\",\n  \"required\": true,\n  \"observationRequiredOnFailure\": true,\n  \"evidenceRequiredOnFailure\": true,\n  \"displayOrder\": 0\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('itemId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Criar item (CONFORMITY)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"code\": \"VIS-002\",\n  \"title\": \"Condicao geral do equipamento\",\n  \"description\": \"Avaliar conformidade geral do equipamento\",\n  \"responseType\": \"CONFORMITY\",\n  \"required\": true,\n  \"observationRequiredOnFailure\": true,\n  \"evidenceRequiredOnFailure\": false,\n  \"displayOrder\": 1\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Criar item (SINGLE_CHOICE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"code\": \"VIS-003\",\n  \"title\": \"Nivel de ruido do equipamento\",\n  \"description\": \"Selecionar nivel de ruido percebido\",\n  \"responseType\": \"SINGLE_CHOICE\",\n  \"required\": true,\n  \"observationRequiredOnFailure\": false,\n  \"evidenceRequiredOnFailure\": false,\n  \"optionsJson\": \"[\\\"Baixo\\\",\\\"Medio\\\",\\\"Alto\\\",\\\"Critico\\\"]\",\n  \"displayOrder\": 2\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Criar item (TEXT_SHORT)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"code\": \"VIS-004\",\n  \"title\": \"Observacoes gerais\",\n  \"responseType\": \"TEXT_SHORT\",\n  \"required\": false,\n  \"observationRequiredOnFailure\": false,\n  \"evidenceRequiredOnFailure\": false,\n  \"displayOrder\": 3\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Atualizar item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items/{{itemId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"code\": \"VIS-001\",\n  \"title\": \"Existe vazamento de oleo? (revisado)\",\n  \"responseType\": \"BOOLEAN\",\n  \"required\": true,\n  \"observationRequiredOnFailure\": true,\n  \"evidenceRequiredOnFailure\": true,\n  \"displayOrder\": 0\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Deletar item",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/sections/{{sectionId}}/items/{{itemId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('204 No Content', () => pm.response.to.have.status(204));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "09 - Inspeções",
+      "item": [
+        {
+          "name": "Criar inspeção",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"clientId\": {{clientId}},\n  \"siteId\": {{siteId}},\n  \"assignedToId\": {{userId}},\n  \"templateVersionId\": {{versionId}},\n  \"equipmentId\": {{equipmentId}},\n  \"scheduledDate\": \"2026-10-15\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('inspectionId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar inspeções",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar inspeção por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Inspeções atribuídas ao técnico",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/assigned?technicianId={{userId}}",
+              "query": [{ "key": "technicianId", "value": "{{userId}}" }]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Iniciar inspeção",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/start?requestingUserId={{userId}}",
+              "query": [{ "key": "requestingUserId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"startedAtDevice\": \"2026-10-15T08:00:00\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Concluir inspeção",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/complete?requestingUserId={{userId}}",
+              "query": [{ "key": "requestingUserId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"completedAtDevice\": \"2026-10-15T10:00:00\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Cancelar inspeção",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/cancel?requestingUserId={{userId}}",
+              "query": [{ "key": "requestingUserId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"reason\": \"Equipamento indisponivel para inspecao no dia agendado\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "10 - Respostas do Checklist",
+      "item": [
+        {
+          "name": "Registrar resposta (BOOLEAN - true)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"snapshotItemId\": {{itemId}},\n  \"value\": \"true\",\n  \"observation\": null,\n  \"notApplicable\": false\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('responseId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Registrar resposta (BOOLEAN - false com observação)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"snapshotItemId\": {{itemId}},\n  \"value\": \"false\",\n  \"observation\": \"Vazamento identificado no selo mecanico\",\n  \"notApplicable\": false\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Registrar resposta (Não Aplicável)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"snapshotItemId\": {{itemId}},\n  \"value\": null,\n  \"observation\": null,\n  \"notApplicable\": true\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Listar respostas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar resposta por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses/{{responseId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar resposta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses/{{responseId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"snapshotItemId\": {{itemId}},\n  \"value\": \"true\",\n  \"observation\": \"Corrigido apos ajuste\",\n  \"notApplicable\": false\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Progresso da inspeção",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/responses/progress"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "11 - Evidências",
+      "item": [
+        {
+          "name": "Upload de evidência",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/evidences?responseId={{responseId}}&uploadedByUserId={{userId}}",
+              "query": [
+                { "key": "responseId", "value": "{{responseId}}" },
+                { "key": "uploadedByUserId", "value": "{{userId}}" }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('evidenceId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar evidências",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/evidences"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar evidência por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/evidences/{{evidenceId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Deletar evidência",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/evidences/{{evidenceId}}?deletedByUserId={{userId}}&reason=Arquivo incorreto",
+              "query": [
+                { "key": "deletedByUserId", "value": "{{userId}}" },
+                { "key": "reason", "value": "Arquivo incorreto" }
+              ]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "12 - Não Conformidades",
+      "item": [
+        {
+          "name": "Registrar NC (HIGH)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/non-conformities",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Vazamento no selo mecanico\",\n  \"description\": \"Vazamento de oleo identificado no selo mecanico\",\n  \"severity\": \"HIGH\",\n  \"snapshotItemId\": {{itemId}},\n  \"evidenceAttached\": false\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('ncId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Registrar NC (CRITICAL — exige descrição)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/non-conformities",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Risco de explosao\",\n  \"description\": \"Pressao acima do limite critico detectada no manometro\",\n  \"severity\": \"CRITICAL\",\n  \"snapshotItemId\": {{itemId}},\n  \"evidenceAttached\": true\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('201 Created', () => pm.response.to.have.status(201));"] }
+          }]
+        },
+        {
+          "name": "Listar NCs da inspeção",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/non-conformities"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar NC por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/non-conformities/{{ncId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Atualizar NC",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/non-conformities/{{ncId}}",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"title\": \"Vazamento no selo mecanico - atualizado\",\n  \"description\": \"Vazamento confirmado apos nova verificacao\",\n  \"severity\": \"HIGH\",\n  \"snapshotItemId\": {{itemId}},\n  \"evidenceAttached\": true\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status NC (RESOLVED)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/non-conformities/{{ncId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"RESOLVED\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Alterar status NC (DISMISSED — exige justificativa)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{baseUrl}}/api/v1/non-conformities/{{ncId}}/status",
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"status\": \"DISMISSED\",\n  \"dismissalReason\": \"Item nao se aplica a este modelo de equipamento\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "13 - Revisão",
+      "item": [
+        {
+          "name": "Iniciar revisão",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/reviews?reviewerId={{userId}}",
+              "query": [{ "key": "reviewerId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"comment\": \"Iniciando revisao da inspecao mensal\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const b = pm.response.json();",
+              "if (b.data && b.data.id) pm.collectionVariables.set('reviewId', b.data.id);"
+            ]}
+          }]
+        },
+        {
+          "name": "Listar revisões da inspeção",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/reviews"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar revisão por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/reviews/{{reviewId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Aprovar inspeção",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/{{reviewId}}/approve?reviewerId={{userId}}",
+              "query": [{ "key": "reviewerId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"comment\": \"Inspecao aprovada. Todos os itens em conformidade.\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Reprovar inspeção",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/{{reviewId}}/reject?reviewerId={{userId}}",
+              "query": [{ "key": "reviewerId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"rejectionReason\": \"Itens obrigatorios sem resposta. Revisar itens VIS-001 e VIS-002.\"\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "14 - Sincronização",
+      "item": [
+        {
+          "name": "Status de sync da inspeção",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/api/v1/inspections/{{inspectionId}}/sync-status"
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Processar lote de sync",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sync/batch?technicianId={{userId}}",
+              "query": [{ "key": "technicianId", "value": "{{userId}}" }]
+            },
+            "body": {
+              "mode": "raw",
+              "options": { "raw": { "language": "json" } },
+              "raw": "{\n  \"operations\": [\n    {\n      \"idempotencyKey\": \"op-abc123-uuid\",\n      \"type\": \"SAVE_RESPONSE\",\n      \"payload\": {\n        \"inspectionId\": {{inspectionId}},\n        \"snapshotItemId\": {{itemId}},\n        \"value\": \"true\",\n        \"notApplicable\": false\n      }\n    }\n  ]\n}"
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    },
+
+    {
+      "name": "15 - Audit Logs",
+      "item": [
+        {
+          "name": "Listar audit logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit-logs?requestingUserId={{userId}}",
+              "query": [{ "key": "requestingUserId", "value": "{{userId}}" }]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        },
+        {
+          "name": "Buscar audit log por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit-logs/1?requestingUserId={{userId}}",
+              "query": [{ "key": "requestingUserId", "value": "{{userId}}" }]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', () => pm.response.to.have.status(200));"] }
+          }]
+        }
+      ]
+    }
+
+  ]
+}
