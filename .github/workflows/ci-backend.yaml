@@ -3,7 +3,6 @@ name: CI - Backend Java #define o nome do runner
 on: # define quando as ações vão disparar 
   push: # sempre que houver push
     branches:
-      - main
       - develop
       - backend-devops        
     paths:  # só dispara se mudou algo nesses caminhos
@@ -11,7 +10,6 @@ on: # define quando as ações vão disparar
       - '.github/workflows/ci-backend.yml'
   pull_request:
     branches:
-      - main
       - develop
     paths:
       - 'fieldops/api/**'
