@@ -1,0 +1,437 @@
+  <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronograma FieldOps</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 15px;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+
+    p.sub {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 10px;
+      margin-bottom: 14px;
+    }
+
+    .wrapper {
+      flex: 1;
+      overflow-x: auto;
+    }
+
+    .gantt {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .gantt thead th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 6px 3px;
+      text-align: center;
+      border: 1px solid #334155;
+      white-space: nowrap;
+    }
+
+    .gantt thead th.label-col {
+      text-align: left;
+      padding-left: 8px;
+      width: 30%;
+    }
+
+    .gantt thead th.date-col {
+      width: calc(70% / 6);
+    }
+
+    .gantt tbody tr:nth-child(odd)  { background: #1e293b; }
+    .gantt tbody tr:nth-child(even) { background: #162032; }
+
+    .gantt tbody td {
+      border: 1px solid #2d3f55;
+      padding: 3px 3px;
+      vertical-align: middle;
+      height: 28px;
+    }
+
+    .gantt tbody td.label {
+      padding-left: 8px;
+      color: #cbd5e1;
+      font-size: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .gantt tbody tr.fase-header td {
+      background: #0f172a;
+      padding: 4px 8px;
+      font-weight: 700;
+      font-size: 10px;
+      color: #7dd3fc;
+      letter-spacing: .4px;
+      border-top: 2px solid #334155;
+      height: 24px;
+    }
+
+    .bar {
+      height: 18px;
+      border-radius: 3px;
+      width: 100%;
+      display: block;
+    }
+
+    .c-iniciacao    { background: #0891b2; }
+    .c-planejamento { background: #7c3aed; }
+    .c-design       { background: #ea580c; }
+    .c-dev          { background: #dc2626; }
+    .c-testes       { background: #ca8a04; }
+    .c-entrega      { background: #059669; }
+    .c-encerramento { background: #475569; }
+
+    .empty { background: transparent; }
+
+    .legenda {
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .legenda span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legenda i {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📋 FieldOps — Cronograma Macro Quinzenal</h1>
+<p class="sub">Setembro → Novembro 2026 · Quinzenas de 15 dias</p>
+
+<div class="wrapper">
+<table class="gantt">
+  <thead>
+    <tr>
+      <th class="label-col">Fase / Entrega</th>
+      <th class="date-col">01/09<br/>15/09</th>
+      <th class="date-col">16/09<br/>30/09</th>
+      <th class="date-col">01/10<br/>15/10</th>
+      <th class="date-col">16/10<br/>31/10</th>
+      <th class="date-col">01/11<br/>15/11</th>
+      <th class="date-col">16/11<br/>30/11</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 01 INICIAÇÃO -->
+    <tr class="fase-header">
+      <td colspan="7">🔵 01 · INICIAÇÃO</td>
+    </tr>
+    <tr>
+      <td class="label">Definição do produto</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label">Declaração de escopo</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label">Identificação de stakeholders</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label">Premissas e restrições</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label">Prototipação</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label">TAP e EAP</td>
+      <td><div class="bar c-iniciacao"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+
+    <!-- 02 PLANEJAMENTO -->
+    <tr class="fase-header">
+      <td colspan="7">🟣 02 · PLANEJAMENTO</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Épicos e backlog priorizado</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Roadmap e sprints</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Personas e perfis de usuário</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Casos de uso</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Critérios de aceitação</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Documentação de planejamento</span></td>
+      <td class="empty"></td>
+      <td><div class="bar c-planejamento"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+
+    <!-- 03 DESIGN -->
+    <tr class="fase-header">
+      <td colspan="7">🟠 03 · DESIGN E ARQUITETURA</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Modelo de dados</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Arquitetura geral Mobile/Web/API</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Contrato da API (OpenAPI)</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Estratégia offline-first</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Segurança</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Infraestrutura e ambientes</span></td>
+      <td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-design"></div></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+    </tr>
+
+    <!-- 04 DESENVOLVIMENTO -->
+    <tr class="fase-header">
+      <td colspan="7">🔴 04 · DESENVOLVIMENTO</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-01 Fundação técnica</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-02 Identidade e acesso</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-03 Cadastros operacionais</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td><td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-04 Modelos de inspeção</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-05 Planejamento</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-06 Execução de campo</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+      <td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-07 Recursos nativos e evidências</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-08 Offline e sincronização</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">EP-09 Revisão e decisão</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-dev"></div></td>
+    </tr>
+
+    <!-- 05 TESTES -->
+    <tr class="fase-header">
+      <td colspan="7">🟡 05 · TESTES</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Testes unitários</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-testes"></div></td>
+      <td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Testes de integração</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-testes"></div></td>
+      <td class="empty"></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Testes de sincronização</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-testes"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Pentest</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-testes"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Testes de aceitação</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-testes"></div></td>
+    </tr>
+
+    <!-- 06 ENTREGA -->
+    <tr class="fase-header">
+      <td colspan="7">🟢 06 · ENTREGA E IMPLANTAÇÃO</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Build Android (EAS)</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-entrega"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Deploy painel web administrativo</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-entrega"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Deploy da API (container/nuvem)</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-entrega"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Seeds de demonstração</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-entrega"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Pipelines CI/CD</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-entrega"></div></td>
+    </tr>
+
+    <!-- 07 ENCERRAMENTO -->
+    <tr class="fase-header">
+      <td colspan="7">⚪ 07 · ENCERRAMENTO</td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Documentação final (README, OpenAPI)</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-encerramento"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Demonstração ponta a ponta</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-encerramento"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Checklist de avaliação</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-encerramento"></div></td>
+    </tr>
+    <tr>
+      <td class="label"><span class="tarefa">Retrospectiva e lições aprendidas</span></td>
+      <td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td>
+      <td><div class="bar c-encerramento"></div></td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<div class="legenda">
+  <span><i style="background:#0891b2"></i>Iniciação</span>
+  <span><i style="background:#7c3aed"></i>Planejamento</span>
+  <span><i style="background:#ea580c"></i>Design</span>
+  <span><i style="background:#dc2626"></i>Desenvolvimento</span>
+  <span><i style="background:#ca8a04"></i>Testes</span>
+  <span><i style="background:#059669"></i>Entrega</span>
+  <span><i style="background:#475569"></i>Encerramento</span>
+</div>
+
+</body>
+</html>
