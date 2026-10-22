@@ -1,0 +1,30 @@
+# Dependências
+
+node_modules/
+
+# Build
+
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Variáveis de ambiente
+
+.env
+.env.*
+!.env.example
+
+# Editores
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Projeto Vite separado
+fieldops-front/
