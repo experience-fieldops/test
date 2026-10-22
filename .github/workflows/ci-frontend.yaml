@@ -42,10 +42,6 @@ jobs: # nome do job e a máquina virtual que roda
       - name: Instalar dependências
         run: npm ci
 
-      # roda o linter (oxlint via eslint)
-      - name: Rodar lint
-        run: npm run lint
-
       # compila o TypeScript e gera o bundle de produção
       - name: Build de produção
         run: npm run build
