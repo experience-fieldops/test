@@ -1,0 +1,55 @@
+name: CI - Frontend React # define o nome do runner
+
+on: # define quando as ações vão disparar
+  push: # sempre que houver push
+    branches:
+      - develop
+      - frontend-devops
+    paths: # só dispara se mudou algo nesses caminhos
+      - 'Front/**'
+      - '.github/workflows/ci-frontend.yaml'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'Front/**'
+      - '.github/workflows/ci-frontend.yaml'
+
+defaults: # define diretório padrão para correr os passos
+  run:
+    working-directory: Front
+
+jobs: # nome do job e a máquina virtual que roda
+  build-and-lint:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+
+    steps: # ações pela qual o CI vai passar
+
+      # baixa o código na máquina virtual
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # instala o Node 20
+      - name: Configurar Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Front/package-lock.json
+
+      # instala as dependências do projeto
+      - name: Instalar dependências
+        run: npm ci
+
+      # compila o TypeScript e gera o bundle de produção
+      - name: Build de produção
+        run: npm run build
+
+      # salva o bundle gerado como artefato
+      - name: Upload do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: Front/dist/
+          retention-days: 7
