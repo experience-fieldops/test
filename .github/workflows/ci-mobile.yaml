@@ -8,3 +8,9 @@ on: # define quando as ações vão disparar
     paths: # dispara somente se estes caminhos mudarem
       - 'Mobile_FieldOps/**'
       - '.github/workflows/ci-mobile.yaml'
+  pull_request: # executa em pull requests para develop
+    branches:
+      - develop
+    paths:
+      - 'Mobile_FieldOps/**'
+      - '.github/workflows/ci-mobile.yaml'
