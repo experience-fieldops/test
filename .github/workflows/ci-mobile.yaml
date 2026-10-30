@@ -1,1 +1,10 @@
 name: CI - Mobile React Native # define o nome do workflow
+
+on: # define quando as ações vão disparar
+  push: # executa quando houver push
+    branches:
+      - develop
+      - mobile-devops
+    paths: # dispara somente se estes caminhos mudarem
+      - 'Mobile_FieldOps/**'
+      - '.github/workflows/ci-mobile.yaml'
