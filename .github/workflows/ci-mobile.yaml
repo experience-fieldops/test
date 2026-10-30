@@ -14,3 +14,8 @@ on: # define quando as ações vão disparar
     paths:
       - 'Mobile_FieldOps/**'
       - '.github/workflows/ci-mobile.yaml'
+
+defaults: # define o diretório padrão dos comandos
+  run:
+    working-directory: Mobile_FieldOps
+
