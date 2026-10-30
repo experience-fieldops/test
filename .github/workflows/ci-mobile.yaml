@@ -19,3 +19,44 @@ defaults: # define o diretório padrão dos comandos
   run:
     working-directory: Mobile_FieldOps
 
+jobs: # define os jobs executados pelo GitHub Actions
+  build-and-lint:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      # baixa o código para a máquina virtual
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # configura o Node 22, compatível com a versão do React Native do projeto
+      - name: Configurar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: Mobile_FieldOps/package-lock.json
+
+      # instala as dependências conforme o package-lock.json
+      - name: Instalar dependências
+        run: npm ci
+
+      # verifica os tipos TypeScript
+      - name: Verificar TypeScript
+        run: npx tsc --noEmit
+
+      # verifica o código com as regras ESLint do projeto
+      - name: Executar ESLint
+        run: npx eslint .
+
+      # gera o bundle Android do aplicativo Expo
+      - name: Gerar export Android do Expo
+        run: npx expo export --platform android
+
+      # salva o bundle gerado como artefato
+      - name: Upload do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-android-bundle
+          path: Mobile_FieldOps/dist/
+          retention-days: 7
