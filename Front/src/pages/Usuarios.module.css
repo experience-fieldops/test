@@ -1,0 +1,298 @@
+.page {}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.newBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.newBtn:hover { background: #388E3C; }
+
+/* Novo cliente card */
+.novoCard {
+  background: white;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.novoLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.novoInput {
+  flex: 1;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  outline: none;
+  background: #f9fafb;
+  transition: border-color 0.15s;
+}
+.novoInput:focus { border-color: #4CAF50; background: white; }
+
+/* Filter bar */
+.filterBar {
+  background: white;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.filterToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  padding: 0;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.searchInput {
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 8px 36px 8px 34px;
+  font-size: 13.5px;
+  outline: none;
+  background: #f9fafb;
+  transition: border-color 0.15s;
+}
+.searchInput:focus { border-color: #4CAF50; background: white; }
+
+.clearBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  outline: none;
+  background: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+}
+.select:focus { border-color: #4CAF50; }
+
+/* Table */
+.tableWrap {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table td {
+  padding: 12px 20px;
+  font-size: 13.5px;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #f9fafb; }
+
+.nameCell { font-weight: 600; color: #111827; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.active   { background: #dcfce7; color: #16a34a; }
+.inactive { background: #f3f4f6; color: #6b7280; }
+.roleADMIN    { background: #dbeafe; color: #2563eb; }
+.roleMANAGER  { background: #ede9fe; color: #7c3aed; }
+.roleINSPECTOR{ background: #fef9c3; color: #ca8a04; }
+.roleREVIEWER { background: #fce7f3; color: #be185d; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.editBtn, .deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.editBtn   { background: #dbeafe; color: #2563eb; }
+.editBtn:hover   { background: #bfdbfe; }
+.deleteBtn { background: #fee2e2; color: #ef4444; }
+.deleteBtn:hover { background: #fecaca; }
+
+.loading {
+  padding: 32px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* Form inside modal */
+.form { display: flex; flex-direction: column; gap: 14px; }
+
+.formField { display: flex; flex-direction: column; gap: 5px; }
+
+.formLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.formInput {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 14px;
+  outline: none;
+  background: #f9fafb;
+  transition: border-color 0.15s;
+}
+.formInput:focus { border-color: #4CAF50; background: white; }
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.formError {
+  font-size: 12px;
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.cancelBtn {
+  padding: 9px 20px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+.cancelBtn:hover { background: #e5e7eb; }
+
+.submitBtn {
+  padding: 9px 22px;
+  background: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.submitBtn:hover:not(:disabled) { background: #388E3C; }
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
